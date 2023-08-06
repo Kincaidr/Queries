@@ -15,11 +15,13 @@ for i, query_table in enumerate(all_query_tables):
     stack.write('stacked_table.fits', format='fits', overwrite=True)
 
 catalog = Table.read('stacked_table.fits')
-
 for column in catalog.keys():
 # Check if the column dtype starts with 'U' (Unicode string)
-    if catalog[column_name].dtype.kind in ['U', 'S']:
+    if catalog[column].dtype.kind in ['U', 'S']:
+        try:
         # Convert the column to 'float64'
-        catalog[column] = catalog[column].astype('float64')
-
+            catalog[column] = catalog[column].astype('float64')
+        except ValueError:
+            continue
+            
     catalog.write('stacked_table.fits',format='fits',overwrite=True)
